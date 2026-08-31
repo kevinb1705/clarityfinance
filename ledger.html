@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta name="robots" content="noindex, nofollow, noarchive">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KeepClarity — Payday Ledger</title>
@@ -83,6 +84,13 @@
   .goal-row-figures{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-faint);margin-top:6px;}
 
   .fun-fact{display:flex;gap:12px;align-items:flex-start;background:var(--blue-light);border-radius:12px;padding:14px 16px;margin-top:14px;}
+
+  .milestone-wrap{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);}
+  .milestone-title{font-size:12.5px;font-weight:800;color:var(--ink-soft);margin-bottom:10px;}
+  .milestone-row{display:flex;gap:8px;flex-wrap:wrap;}
+  .milestone-chip{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;padding:6px 12px;border-radius:20px;border:1.5px solid var(--line);color:var(--ink-faint);}
+  .milestone-chip.hit{background:var(--dgreen-light);border-color:var(--dgreen);color:var(--dgreen);}
+  .milestone-chip.next{background:var(--yellow-light);border-color:var(--yellow);color:var(--yellow);}
   .fun-fact .icon{font-size:20px;}
   .fun-fact p{margin:0;font-size:13.5px;color:var(--ink);line-height:1.5;}
 
@@ -165,7 +173,9 @@
       <div class="psum-cell"><div class="k">Total saved</div><div class="v" id="totalSaved">$0</div></div>
     </div>
     <div id="goalRows"></div>
+    <div id="milestoneTracker"></div>
     <div class="fun-fact"><span class="icon">💡</span><p id="funFact"></p></div>
+    <div class="fun-fact" style="background:var(--dgreen-light);"><span class="icon">📊</span><p id="savingsFact"></p></div>
   </div>
 
   <div class="section-title">What if I save a little extra?</div>
@@ -235,6 +245,15 @@ const QUOTES_CLOSE = [
   "Progress you can't see is still progress. Check back in a fortnight, not every day.",
   "The goal isn't to never spend on yourself — it's to spend on yourself and still hit the target.",
   "A dollar enjoyed responsibly is not a dollar wasted. That's the whole point of budgeting for wants in the first place."
+];
+
+const SAVINGS_FACTS = [
+  "Money sitting in a high-interest savings account still grows while you wait — an emergency fund isn't 'doing nothing.'",
+  "Splitting savings across several goals at once (instead of one at a time) is proven to keep motivation higher, since you see movement everywhere, not just one place.",
+  "Rounding contributions to clean numbers (like $5 or $10 steps) reduces decision fatigue — you're less likely to skip a fortnight when the amount feels automatic.",
+  "The gap between 'saving' and 'investing' is really about time horizon: money you'll need within a year or two is generally safer sitting in cash, not markets.",
+  "A goal with a real number and a real date gets funded far more reliably than a vague 'save more' intention — specificity is most of the battle.",
+  "Reviewing progress every fortnight, even briefly, is one of the strongest predictors of actually finishing a savings goal on time."
 ];
 
 const DEFAULT_STATE = {
@@ -432,10 +451,28 @@ function render(){
     document.getElementById('funFact').textContent = "Every active goal is on a clear pace right now — nothing urgent to adjust this fortnight.";
   }
 
+  // Investing milestone tracker — visual checklist of every $1,000 saved so far, plus the next one coming up
+  const investGoal = goals.find(g=>g.id==='invest');
+  if(investGoal){
+    const hitCount = Math.floor(investGoal.balance/1000);
+    const chips = [];
+    for(let i=1; i<=Math.max(hitCount+2, 3); i++){
+      const isHit = i<=hitCount;
+      const isNext = i===hitCount+1;
+      chips.push(`<span class="milestone-chip ${isHit?'hit':''} ${isNext?'next':''}">${isHit?'✓ ':''}${fmt(i*1000)}${isNext?' next':''}</span>`);
+    }
+    document.getElementById('milestoneTracker').innerHTML = `
+      <div class="milestone-wrap">
+        <div class="milestone-title">Investing milestones — ${fmt(investGoal.balance)} saved so far</div>
+        <div class="milestone-row">${chips.join('')}</div>
+      </div>`;
+  }
+
   // Quotes — rotate with fortnight index, opening and closing are independent pools
   const idx = Math.abs(fortnightIndex(state.nextPayday));
   document.getElementById('quoteTop').textContent = QUOTES_OPEN[idx % QUOTES_OPEN.length];
   document.getElementById('quoteBottom').textContent = QUOTES_CLOSE[idx % QUOTES_CLOSE.length];
+  document.getElementById('savingsFact').textContent = SAVINGS_FACTS[idx % SAVINGS_FACTS.length];
 
   // What-if calculator
   renderWhatIf(goals);
