@@ -31,7 +31,7 @@
   header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;
     background:var(--white);border:1px solid var(--line);border-radius:16px;padding:20px 24px;margin-bottom:18px;
     box-shadow:0 1px 2px rgba(15,23,42,0.04);}
-  .brand-name{font-weight:800;font-size:20px;color:var(--dgreen);letter-spacing:-0.01em;}
+  .brand-name{font-weight:800;font-size:17px;color:var(--dgreen);letter-spacing:-0.01em;}
   .brand-sub{font-size:11px;color:var(--ink-faint);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;}
   .payday-block{text-align:right;}
   .payday-block .label{font-size:11px;color:var(--ink-faint);text-transform:uppercase;font-weight:700;letter-spacing:0.06em;}
@@ -138,8 +138,8 @@
 
   <header>
     <div>
-      <div class="brand-name">KeepClarity</div>
-      <div class="brand-sub">Fortnightly ledger</div>
+      <div class="brand-sub">KeepClarity &middot; Fortnightly ledger</div>
+      <div class="brand-name" id="pageTitle">Where your pay should go</div>
     </div>
     <div class="payday-block">
       <div class="label">Next payday</div>
@@ -354,7 +354,9 @@ function render(){
   const {goals, investTrigger} = computeGoals();
 
   const nextDate = new Date(state.nextPayday);
-  document.getElementById('nextPayday').textContent = nextDate.toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'});
+  const dateStr = nextDate.toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'});
+  document.getElementById('nextPayday').textContent = dateStr;
+  document.getElementById('pageTitle').textContent = 'Where your pay should go — ' + dateStr;
   const today = new Date();
   const daysUntil = Math.ceil((nextDate-today)/(1000*60*60*24));
   document.getElementById('daysUntil').textContent = daysUntil>=0 ? daysUntil+' days away' : 'passed — update payday';
