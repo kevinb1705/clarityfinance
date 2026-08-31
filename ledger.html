@@ -148,6 +148,8 @@
     </div>
   </header>
 
+  <div style="text-align:center;font-size:11px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:18px;" id="syncStatus">Checking for the latest data…</div>
+
   <div class="panel quote-panel">
     <span class="quote-mark">"</span>
     <p id="quoteTop"></p>
@@ -195,11 +197,16 @@
 
   <div class="section-title">Update balances</div>
   <div class="panel">
+    <div style="font-size:12.5px;color:var(--ink-soft);margin-bottom:12px;">These fields are for a quick local preview only — they don't save. To actually change your balances everywhere, edit config.json on GitHub.</div>
     <div class="balance-inputs" id="balanceInputs"></div>
+    <div style="text-align:center;margin-top:16px;">
+      <a href="https://github.com/kevinb1705/clarityfinance/edit/main/config.json" style="display:inline-block;background:var(--dgreen);color:#fff;text-decoration:none;font-weight:800;font-size:13px;padding:10px 20px;border-radius:10px;">Update balances on GitHub →</a>
+    </div>
   </div>
 
   <div class="section-title">Adjust</div>
   <div class="panel">
+    <div style="font-size:12.5px;color:var(--ink-soft);margin-bottom:12px;">These also save locally to this device only, for previewing a different date or income — not for updating the real payday used across devices, which comes from config.json.</div>
     <div class="controls">
       <div><label>Next payday</label><input type="date" id="paydayInput"></div>
       <div><label>Take-home / fortnight</label><input type="number" id="incomeInput" step="10"></div>
@@ -532,17 +539,50 @@ function renderWhatIf(goals){
   update();
 }
 
+const REPO_OWNER = 'kevinb1705';
+const REPO_NAME = 'clarityfinance';
+
+async function fetchLiveConfig(){
+  const url = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/config.json?t=${Date.now()}`;
+  const res = await fetch(url, { cache: 'no-store' });
+  if(!res.ok) throw new Error('fetch failed: ' + res.status);
+  return await res.json();
+}
+
+function applyLiveConfig(config){
+  const balanceMap = {};
+  (config.goals || []).forEach(g=>{ balanceMap[g.id] = g.balance || 0; });
+  state.balances = { ...state.balances, ...balanceMap };
+  if(config.next_payday) state.nextPayday = config.next_payday;
+  if(config.income_per_fortnight) state.income = config.income_per_fortnight;
+}
+
 async function loadState(){
+  let liveSynced = false;
   try{
-    if(window.storage && window.storage.get){
-      const res = await window.storage.get('ledger-state-v2', false);
-      if(res && res.value){ state = {...state, ...JSON.parse(res.value)}; }
-    } else {
-      const raw = localStorage.getItem('keepclarity-ledger-state-v2');
-      if(raw){ state = {...state, ...JSON.parse(raw)}; }
-    }
-  }catch(e){ /* defaults */ }
+    const config = await fetchLiveConfig();
+    applyLiveConfig(config);
+    liveSynced = true;
+  }catch(e){
+    // Offline or fetch blocked — fall back to whatever was last seen on this device
+    try{
+      if(window.storage && window.storage.get){
+        const res = await window.storage.get('ledger-state-v2', false);
+        if(res && res.value){ state = {...state, ...JSON.parse(res.value)}; }
+      } else {
+        const raw = localStorage.getItem('keepclarity-ledger-state-v2');
+        if(raw){ state = {...state, ...JSON.parse(raw)}; }
+      }
+    }catch(e2){ /* defaults */ }
+  }
   render();
+  const syncEl = document.getElementById('syncStatus');
+  if(syncEl){
+    syncEl.textContent = liveSynced
+      ? 'Live — synced just now from config.json'
+      : "Offline — showing last known values on this device";
+    syncEl.style.color = liveSynced ? 'var(--dgreen)' : 'var(--red)';
+  }
 }
 
 async function saveState(){
