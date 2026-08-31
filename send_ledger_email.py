@@ -177,12 +177,10 @@ def render_email_html(config, goals, next_payday, invest_trigger):
 
     owner = config.get("github_repo_owner", "")
     repo = config.get("github_repo_name", "")
-    update_url = f"https://github.com/{owner}/{repo}/edit/main/config.json" if owner and repo else "#"
     dashboard_url = f"https://{owner}.github.io/{repo}/ledger.html" if owner and repo else "#"
     update_button = f"""
     <div style="text-align:center;margin:18px 0;">
-      <a href="{dashboard_url}" style="display:inline-block;background:{WHITE};color:{DGREEN};text-decoration:none;font-weight:bold;font-size:14px;padding:12px 24px;border-radius:10px;border:2px solid {DGREEN};margin:4px;">View live dashboard →</a>
-      <a href="{update_url}" style="display:inline-block;background:{DGREEN};color:#ffffff;text-decoration:none;font-weight:bold;font-size:14px;padding:12px 28px;border-radius:10px;margin:4px;">Update your balances now →</a>
+      <a href="{dashboard_url}" style="display:inline-block;background:{DGREEN};color:#ffffff;text-decoration:none;font-weight:bold;font-size:14px;padding:12px 28px;border-radius:10px;margin:4px;">View live dashboard →</a>
     </div>
     """
 
@@ -352,7 +350,7 @@ def render_email_html(config, goals, next_payday, invest_trigger):
 
       <div style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:2px;color:{INK_FAINT};text-transform:uppercase;margin:26px 0 10px;">Manual balance tracker</div>
       <div style="background:{WHITE};border:1px solid {LINE};border-radius:16px;padding:20px 24px;">
-        <div style="font-size:12.5px;color:{INK_SOFT};margin-bottom:12px;">This is exactly what's in <code style="background:{BG};padding:2px 6px;border-radius:4px;">config.json</code> right now — update the balances there next payday and this table refreshes automatically.</div>
+        <div style="font-size:12.5px;color:{INK_SOFT};margin-bottom:12px;">This is what was in your goals as of this email. Update your balances on the live dashboard, and this table refreshes on the next email.</div>
         <table width="100%" style="border-collapse:collapse;">
           <tr>
             <th style="text-align:left;padding:8px;font-size:10.5px;color:{INK_FAINT};text-transform:uppercase;letter-spacing:0.5px;border-bottom:2px solid {LINE};">Goal</th>
@@ -401,7 +399,7 @@ def render_email_html(config, goals, next_payday, invest_trigger):
       </div>
 
       <div style="text-align:center;font-family:'Courier New',monospace;font-size:10px;color:{INK_FAINT};letter-spacing:1px;margin-top:26px;text-transform:uppercase;">
-        keepclarity &middot; tap "Update your balances now" above to edit config.json directly
+        keepclarity &middot; tap "View live dashboard" above to update your balances
       </div>
     </div>
     </body></html>
