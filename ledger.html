@@ -221,8 +221,8 @@
 const GOAL_DEFS = [
   { id:'india', name:'India Transfer', target:5000, priority:1, weight:0.40, desc:'One-time lump sum send', color:'#2563eb' },
   { id:'car', name:'Car', target:6000, priority:2, weight:0.30, desc:'Top priority after India', color:'#ca8a04' },
-  { id:'emergency', name:'Emergency Fund', target:0, type:'buffer', targetFortnights:6, priority:3, weight:0.20, desc:'6 fortnights of take-home pay', color:'#065f46' },
-  { id:'invest', name:'Investing', type:'ongoing', priority:4, weight:0.10, desc:'Ongoing — no fixed target, milestone alerts every $1,000 saved', color:'#dc2626' }
+  { id:'invest', name:'Investing', type:'ongoing', priority:3, weight:0.20, desc:'Ongoing — no fixed target, milestone alerts every $1,000 saved', color:'#dc2626' },
+  { id:'emergency', name:'Emergency Fund', target:0, type:'buffer', targetFortnights:6, priority:4, weight:0.10, desc:'6 fortnights of take-home pay', color:'#065f46' }
 ];
 
 const SALARY_MOVEMENTS = [
@@ -293,8 +293,8 @@ function computeGoals(){
   const weightSets = {
     india:    shuffled ? 0.32 : 0.40,
     car:      shuffled ? 0.28 : 0.30,
-    emergency:shuffled ? 0.24 : 0.20,
-    invest:   shuffled ? 0.16 : 0.10
+    invest:   shuffled ? 0.24 : 0.20,
+    emergency:shuffled ? 0.16 : 0.10
   };
 
   let goals = GOAL_DEFS.map(g=>{
