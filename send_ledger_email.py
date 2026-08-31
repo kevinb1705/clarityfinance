@@ -321,8 +321,8 @@ def render_email_html(config, goals, next_payday, invest_trigger):
     <div style="max-width:640px;margin:0 auto;padding:28px 18px;">
 
       <div style="background:{WHITE};border:1px solid {LINE};border-radius:16px;padding:20px 24px;margin-bottom:18px;">
-        <div style="font-weight:800;font-size:20px;color:{DGREEN};">KeepClarity</div>
-        <div style="font-size:11px;color:{INK_FAINT};font-weight:bold;text-transform:uppercase;letter-spacing:1px;">Fortnightly ledger &middot; {next_payday.strftime('%d %b %Y')}</div>
+        <div style="font-size:11px;color:{INK_FAINT};font-weight:bold;text-transform:uppercase;letter-spacing:1px;">KeepClarity &middot; Fortnightly ledger</div>
+        <div style="font-weight:800;font-size:17px;color:{DGREEN};">Where your pay should go — {next_payday.strftime('%d %b %Y')}</div>
       </div>
 
       {update_button}
@@ -418,7 +418,7 @@ def send_email(html_body, config):
     recipient = os.environ.get("RECIPIENT_EMAIL") or config["recipient_email"]
 
     msg = MIMEMultipart("alternative")
-    msg["Subject"] = f"KeepClarity — Payday Ledger, {datetime.now().strftime('%d %b %Y, %I:%M%p')}"
+    msg["Subject"] = f"Where your pay should go — {datetime.now().strftime('%d %b %Y, %I:%M%p')}"
     msg["From"] = sender
     msg["To"] = recipient
     msg.attach(MIMEText(html_body, "html"))
