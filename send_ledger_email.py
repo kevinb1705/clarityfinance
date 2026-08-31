@@ -4,9 +4,9 @@ KeepClarity — fortnightly goals ledger email.
 Mirrors ledger.html exactly:
   - Salary movements required (fixed spending breakdown)
   - $1,000 leftover split by strict priority: India Transfer (40%) >
-    Car (30%) > Emergency Fund (20%) > Investing (10%, ongoing habit,
-    no fixed target). When a higher-priority goal completes, its share
-    cascades proportionally to whatever's still active.
+    Car (30%) > Investing (20%, ongoing habit, no fixed target) >
+    Emergency Fund (10%). When a higher-priority goal completes, its
+    share cascades proportionally to whatever's still active.
   - Realistic, pace-projected completion dates (not arbitrary deadlines)
   - Progress snapshot with a live "save a bit extra" insight
   - INVEST NOW alert whenever this fortnight's contribution crosses a
@@ -88,8 +88,8 @@ def fortnight_index(payday):
 # ---------------------------------------------------------------------------
 
 WEIGHT_SETS = {
-    "base":     {"india": 0.40, "car": 0.30, "emergency": 0.20, "invest": 0.10},
-    "shuffled": {"india": 0.32, "car": 0.28, "emergency": 0.24, "invest": 0.16},
+    "base":     {"india": 0.40, "car": 0.30, "invest": 0.20, "emergency": 0.10},
+    "shuffled": {"india": 0.32, "car": 0.28, "invest": 0.24, "emergency": 0.16},
 }
 
 
@@ -178,9 +178,11 @@ def render_email_html(config, goals, next_payday, invest_trigger):
     owner = config.get("github_repo_owner", "")
     repo = config.get("github_repo_name", "")
     update_url = f"https://github.com/{owner}/{repo}/edit/main/config.json" if owner and repo else "#"
+    dashboard_url = f"https://{owner}.github.io/{repo}/ledger.html" if owner and repo else "#"
     update_button = f"""
     <div style="text-align:center;margin:18px 0;">
-      <a href="{update_url}" style="display:inline-block;background:{DGREEN};color:#ffffff;text-decoration:none;font-weight:bold;font-size:14px;padding:12px 28px;border-radius:10px;">Update your balances now →</a>
+      <a href="{dashboard_url}" style="display:inline-block;background:{WHITE};color:{DGREEN};text-decoration:none;font-weight:bold;font-size:14px;padding:12px 24px;border-radius:10px;border:2px solid {DGREEN};margin:4px;">View live dashboard →</a>
+      <a href="{update_url}" style="display:inline-block;background:{DGREEN};color:#ffffff;text-decoration:none;font-weight:bold;font-size:14px;padding:12px 28px;border-radius:10px;margin:4px;">Update your balances now →</a>
     </div>
     """
 
