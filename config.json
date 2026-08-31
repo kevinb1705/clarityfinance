@@ -26,23 +26,23 @@
       "desc": "Top priority after India"
     },
     {
+      "id": "invest",
+      "name": "Investing",
+      "type": "ongoing",
+      "balance": 0,
+      "priority": 3,
+      "weight": 0.20,
+      "desc": "Ongoing — no fixed target, milestone alerts every $1,000 saved"
+    },
+    {
       "id": "emergency",
       "name": "Emergency Fund",
       "type": "buffer",
       "target_fortnights_of_income": 6,
       "balance": 3300,
-      "priority": 3,
-      "weight": 0.20,
-      "desc": "6 fortnights of take-home pay"
-    },
-    {
-      "id": "invest",
-      "name": "Investing",
-      "type": "ongoing",
-      "balance": 0,
       "priority": 4,
       "weight": 0.10,
-      "desc": "Ongoing — no fixed target, milestone alerts every $1,000 saved"
+      "desc": "6 fortnights of take-home pay"
     }
   ]
 }
