@@ -12,8 +12,18 @@
       "target": 5000,
       "balance": 0,
       "priority": 1,
-      "weight": 0.40,
+      "weight": 0.20,
       "desc": "One-time lump sum send"
+    },
+    {
+      "id": "dubai",
+      "name": "Dubai Family Trip",
+      "type": "lump",
+      "target": 8000,
+      "balance": 0,
+      "priority": 1,
+      "weight": 0.20,
+      "desc": "Family trip — aiming for end of March 2027"
     },
     {
       "id": "car",
