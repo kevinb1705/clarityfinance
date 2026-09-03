@@ -88,8 +88,8 @@ def fortnight_index(payday):
 # ---------------------------------------------------------------------------
 
 WEIGHT_SETS = {
-    "base":     {"india": 0.40, "car": 0.30, "invest": 0.20, "emergency": 0.10},
-    "shuffled": {"india": 0.32, "car": 0.28, "invest": 0.24, "emergency": 0.16},
+        "base":     {"india": 0.20, "dubai": 0.20, "car": 0.30, "invest": 0.20, "emergency": 0.10},
+        "shuffled": {"india": 0.16, "dubai": 0.16, "car": 0.28, "invest": 0.24, "emergency": 0.16},
 }
 
 
